@@ -3,7 +3,7 @@ from flask import Flask, g, redirect, request, render_template, send_from_direct
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, joinedload
 from sqlalchemy import func
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import os
 import json
 
@@ -54,6 +54,19 @@ class Category(db.Model):
 
 db.create_all()
 
+def get_item_set_context(item_set):
+    today = date.today()
+    # Check if already expired
+    if item_set.expiration < today:
+        return "danger"
+    # Check if expiry in next 2 weeks
+    if item_set.expiration < today + timedelta(weeks=2):
+        return "warning"
+    # Check if expiry in next month
+    if item_set.expiration < today + timedelta(weeks=4):
+        return "info"
+    return "default"
+
 def build_product_name_items_table(item_sets, order="asc"):
     table_items = {}
     # Build base item table
@@ -64,17 +77,21 @@ def build_product_name_items_table(item_sets, order="asc"):
                 "product_id": item_set.product_id,
                 "item_sets": []
             }
-        table_items[item_set.product_id]["item_sets"].append(item_set)
+        print(type(item_set.expiration))
+        table_items[item_set.product_id]["item_sets"].append({
+            "data": item_set,
+            "context": get_item_set_context(item_set)
+        })
 
     # Order item sets by date
     linear_table = []
     for product_id in table_items:
         product_data = table_items[product_id]
-        product_data['item_sets'].sort(key=lambda d: d.expiration)
+        product_data['item_sets'].sort(key=lambda d: d["data"].expiration)
         linear_table.append(product_data)
 
     # Convert to array and order by product_name
-    linear_table.sort(key=lambda d: d['product_name'], reverse=order=="desc")
+    linear_table.sort(key=lambda d: d['product_name'].lower(), reverse=order=="desc")
     print(linear_table)
 
     return linear_table
