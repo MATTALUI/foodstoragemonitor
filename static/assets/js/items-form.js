@@ -42,6 +42,48 @@
     });
   };
 
+  const setHasError = ($ele, hasError) => {
+    if (hasError) {
+      $ele.addClass('is-invalid');
+    } else {
+      $ele.removeClass('is-invalid');
+    }
+  }
+
+  const validateForm = () => {
+    let valid = true; // Innocent until proven guilty!
+
+    $('.product_name').each((i, ele) => {
+      const $ele = $(ele);
+      // Just has to have a value; go hog wild!
+      const eleValid = !!$ele.val();
+      valid = valid && eleValid;
+      setHasError($ele, !eleValid);
+    });
+
+    $('.quantity').each((i, ele) => {
+      const $ele = $(ele);
+      // Needs value, and must be a positive number
+      const eleValid = !!$ele.val() && !isNaN(+$ele.val()) && +$ele.val() > 0;
+      valid = valid && eleValid;
+      setHasError($ele, !eleValid);
+    });
+
+    $('.expiration').each((i, ele) => {
+      const $ele = $(ele);
+      // Needs value, and must be properly formatted date
+      const eleValid = !!$ele.val() &&
+      (
+        !!$ele.val().match(/^\d{1,2}\/\d{1,2}\/\d{1,}$/) || // mm/dd/yyyy
+        !!$ele.val().match(/^\d{4}-\d{2}-\d{2}$/) // yyyy-mm-dd
+      );
+      valid = valid && eleValid;
+      setHasError($ele, !eleValid);
+    });
+
+    return valid;
+  }
+
   const toggleSpinner = (event) => {
     $('.loader').toggleClass('d-flex').toggleClass('d-none');
     $('form').closest('.row').toggleClass('d-none');
@@ -50,6 +92,10 @@
   const removeItemSelection = (event, options={}) => $(event.target).closest('.item_set').remove();
 
   const saveItems = (event, options={}) => {
+    if (!validateForm()) {
+      $('.is-invalid').first().focus();
+      return;
+    }
     toggleSpinner();
     const data = Array
       .from(document.querySelectorAll('.item_set'))
