@@ -78,7 +78,7 @@
                     {{ product_data['product_name'] }}
                   </td>
                 {% endif %}
-                <td class="expiration">{{ item_set['expiration'] }}</td>
+                <td class="expiration">{{ item_set['expiration'].strftime("%m/%d/%Y") }}</td>
                 <td class="quantity">{{ item_set['quantity'] }}</td>
                 <td class="description">{{ item_set['description'] or '' }}</td>
                 <td class="d-flex justify-content-end">
