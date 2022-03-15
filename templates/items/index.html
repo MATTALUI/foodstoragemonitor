@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Food Store | Storage Items{% endblock %}
+{% block navextra%}
+  <script src="/assets/js/storage-items-index.js" charset="utf-8" defer></script>
+  <a href="/storage-items/new" class="btn btn-secondary btn-lg">
+    <i class="fas fa-plus-square"></i>
+    Add Item(s)
+  </a>
+{% endblock %}
+{% block content %}
+  <form>
+    <div class="row">
+      <div class="col-sm-2">
+        <input type="submit" value="Search" class="btn btn-primary w-100" />
+      </div>
+      <div class="form-group col-sm-5">
+        <label for="search" class="sr-only">Password</label>
+        <input type="text" name="search" class="form-control w-100" id="search" placeholder="Search" value="{{params.get('search') or ''}}">
+      </div>
+      <div class=" col-sm-2">
+        <select class="form-control w-100" name="category">
+            <option value="">Category</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {{ 'selected' if category.id == (params.get('category') | int) else ''}}>
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+      </div>
+      <div class="col-sm-2">
+        <select class="form-control w-100" name="group">
+            <option value="">Group</option>
+            {% for group in groups %}
+              <option value="{{ group.id }}" {{ 'selected' if group.id == (params.get('group') | int) else ''}}>{{ group.name }}</option>
+            {% endfor %}
+          </select>
+      </div>
+      <div class="col-sm-1">
+        <a href="/" class="btn btn-secondary">Clear</a>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>
+              Name
+              <!-- <span class="d-flex flex-column">
+                  <i class="fas fa-sort-up"></i>
+                  <i class="fas fa-sort-down"></i>
+
+                </span> -->
+            </th>
+            <th>
+              Expiration
+              <!-- <i class="fas fa-sort"></i> -->
+            </th>
+            <th>
+              Quantity
+              <!-- <i class="fas fa-sort"></i> -->
+            </th>
+            <th>
+              Description
+              <!-- <i class="fas fa-sort"></i> -->
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product_data in items_table %}
+            {% for index in range(product_data['item_sets']|length) %}
+              {% set item_set = product_data['item_sets'][index] %}
+              <tr class="itemset" data-itemset="{{item_set['id']}}">
+                {% if index == 0 %}
+                  <td class="product_name" rowspan="{{product_data['item_sets']|length}}">
+                    {{ product_data['product_name'] }}
+                  </td>
+                {% endif %}
+                <td class="expiration">{{ item_set['expiration'] }}</td>
+                <td class="quantity">{{ item_set['quantity'] }}</td>
+                <td class="description">{{ item_set['description'] or '' }}</td>
+                <td class="d-flex justify-content-end">
+                  <div class="btn-group">
+                    <a class="btn btn-sm btn-secondary increment">Increment</a>
+                    <a class="btn btn-sm btn-secondary decrement">Decrement</a>
+                    <a class="btn btn-sm btn-warning">Edit</a>
+                    <a class="btn btn-sm btn-danger delete">Delete</a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if items_table|length == 0 %}
+        <div class="alert alert-info">
+          You have not added any items to storage yet.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

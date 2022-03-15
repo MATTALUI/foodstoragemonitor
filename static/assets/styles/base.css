@@ -1,0 +1,25 @@
+/* https://api.jqueryui.com/theming/css-framework/ */
+/* These classes are for the autocomplete */
+.ui-helper-hidden-accessible {
+  display: none;
+}
+
+.ui-autocomplete {
+  background-color: white;
+  border: 1px solid rgb(89, 49, 150); /* Theme's Purple */
+  border-top: none;
+}
+
+.ui-menu {
+  list-style-type: none;
+  padding: 0;
+}
+
+.ui-menu-item {
+  padding: 0.125rem 0.5rem;
+}
+
+.ui-menu-item:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
