@@ -8,11 +8,13 @@ import os
 import json
 
 cwd = os.getcwd()
-# env = Environment(extensions=[HamlishExtension])
 app = Flask(__name__)
 db_path = "sqlite:///" + cwd + "/database.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = db_path
 db = SQLAlchemy(app)
+
+WARNING_WEEKS = 2
+HIGHLIGHT_WEEKS = 4
 
 
 ProductGroup = db.Table('product_group',
@@ -54,16 +56,21 @@ class Category(db.Model):
 
 db.create_all()
 
+def get_warning_date():
+    return date.today() + timedelta(weeks=WARNING_WEEKS)
+
+def get_highlight_date():
+    return date.today() + timedelta(weeks=HIGHLIGHT_WEEKS)
+
 def get_item_set_context(item_set):
-    today = date.today()
     # Check if already expired
-    if item_set.expiration < today:
+    if item_set.expiration < date.today():
         return "danger"
     # Check if expiry in next 2 weeks
-    if item_set.expiration < today + timedelta(weeks=2):
+    if item_set.expiration < get_warning_date():
         return "warning"
     # Check if expiry in next month
-    if item_set.expiration < today + timedelta(weeks=4):
+    if item_set.expiration < get_highlight_date():
         return "info"
     return "default"
 
@@ -253,3 +260,31 @@ def new_category():
 def get_products_list():
     if request.method == 'GET':
         return products_list()
+
+###############################################################################
+# CRON ROUTES
+###############################################################################
+@app.route("/cron/test", methods=['POST'])
+def test_cron():
+    return "All's well!"
+
+@app.route("/cron/check-expiry", methods=['POST'])
+def check_expiry():
+    expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).count()
+    warning_items = ItemSet.query.filter(ItemSet.expiration < get_warning_date()).filter(ItemSet.expiration >= date.today()).count()
+    highlight_items = ItemSet.query.filter(ItemSet.expiration < get_highlight_date()).filter(ItemSet.expiration >= get_warning_date()).count()
+
+    report = open("report.txt", "w")
+    report.write("▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▜" + "\n")
+    report.write("▌ " + str(datetime.now()) + "\n")
+    report.write("▌ expired:" + str(expired_items) + "\n")
+    report.write("▌ warning:" + str(warning_items) + "\n")
+    report.write("▌ highlight:" + str(highlight_items) + "\n")
+    report.write("▙▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▟" + "\n")
+    report.close()
+
+    return json.dumps({
+        "expired": expired_items,
+        "warning": warning_items,
+        "highlight": highlight_items,
+    })
