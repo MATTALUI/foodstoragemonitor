@@ -14,7 +14,7 @@ cron_blueprint = Blueprint('cron_blueprint', __name__)
 @cron_blueprint.route("/cron/test", methods=['POST'])
 def test_cron():
     hardware_manager.run_test()
-    return "All's well!"
+    return "All's well!\n"
 
 @cron_blueprint.route("/cron/check-expiry", methods=['POST'])
 def check_expiry():
