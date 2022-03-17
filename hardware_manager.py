@@ -18,7 +18,7 @@ class HardwareManager:
         self._led_green = LED(HardwareManager.PIN_GREEN)
         self._led_blue = LED(HardwareManager.PIN_BLUE)
         self._btn = Button(HardwareManager.PIN_BTN)
-        self._start_thread(self._start_general_button)
+        # self._start_thread(self._start_general_button)
 
     def _clear_led(self):
         self._led_red.off()
@@ -37,6 +37,11 @@ class HardwareManager:
         self._clear_led()
         self._led_blue.on()
 
+    def _set_led_yellow(self):
+        self._clear_led()
+        self._led_red.on()
+        self._led_green.on()
+
     def _led_test(self):
         self._set_led_red()
         sleep(1)
@@ -48,17 +53,19 @@ class HardwareManager:
 
     def _start_general_button(self):
         while True:
+            self._btn.wait_for_press()
+            self._btn.wait_for_release()
             # If we're awaiting specific feedback we don't care about
             #general button presses.
             if self._awaiting_button_press:
                 continue
-            self._btn.wait_for_press()
             self._led_test()
-            self._btn.wait_for_release()
 
     def _await_button_press(self):
-        # TODO: Wait for button press
-        self._awaiting_button_press = True
+        self._btn.wait_for_press()
+        self._btn.wait_for_release()
+        self._clear_led()
+        sleep(1)
         self._awaiting_button_press = False
 
     def _start_button_press_thread(self):
@@ -73,12 +80,18 @@ class HardwareManager:
         self._start_thread(self._led_test)
 
     def accept_report(self, expiry_report):
-        self._start_button_press_thread()
+        await_cancel = False
         if expiry_report['expired'] > 0:
-            print('expired')
+            self._set_led_red()
+            await_cancel = True
         elif expiry_report['warning'] > 0:
-            print('warning')
+            self._set_led_yellow()
+            await_cancel = True
         elif expiry_report['highlight'] > 0:
-            print('highlight')
+            self._set_led_blue()
+            await_cancel = True
+        if await_cancel:
+            self._awaiting_button_press = True
+            self._start_thread(self._await_button_press)
 
 hardware_manager = HardwareManager()

@@ -22,7 +22,7 @@ def check_expiry():
     write_expiry_report(report)
     hardware_manager.accept_report(report)
 
-    return json.dumps(report)
+    return json.dumps(report) + "\n"
 
 def build_expiry_report():
     expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).count()
