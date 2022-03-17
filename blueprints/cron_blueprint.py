@@ -16,21 +16,31 @@ def test_cron():
 
 @cron_blueprint.route("/cron/check-expiry", methods=['POST'])
 def check_expiry():
+    report = build_expiry_report()
+    write_expiry_report(report)
+
+    return json.dumps(report)
+
+def build_expiry_report():
     expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).count()
     warning_items = ItemSet.query.filter(ItemSet.expiration < get_warning_date()).filter(ItemSet.expiration >= date.today()).count()
     highlight_items = ItemSet.query.filter(ItemSet.expiration < get_highlight_date()).filter(ItemSet.expiration >= get_warning_date()).count()
 
-    report = open("report.txt", "w")
-    report.write("▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▜" + "\n")
-    report.write("▌ " + str(datetime.now()) + "\n")
-    report.write("▌ expired:" + str(expired_items) + "\n")
-    report.write("▌ warning:" + str(warning_items) + "\n")
-    report.write("▌ highlight:" + str(highlight_items) + "\n")
-    report.write("▙▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▟" + "\n")
-    report.close()
-
-    return json.dumps({
+    return {
         "expired": expired_items,
         "warning": warning_items,
         "highlight": highlight_items,
-    })
+    }
+
+def write_expiry_report(report):
+    expired_padding = " " * (19 - len(str(report["expired"])))
+    warning_padding = " " * (19 - len(str(report["warning"])))
+    highlight_padding = " " * (17 - len(str(report["highlight"])))
+    report_file = open("report.txt", "w")
+    report_file.write("▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▜" + "\n")
+    report_file.write("▌ " + str(datetime.now()) + "  ▐\n")
+    report_file.write("▌ expired: " + str(report["expired"]) + expired_padding + "▐\n")
+    report_file.write("▌ warning: " + str(report["warning"]) + warning_padding + "▐\n")
+    report_file.write("▌ highlight: " + str(report["highlight"]) + highlight_padding + "▐\n")
+    report_file.write("▙▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▟" + "\n")
+    report_file.close()
