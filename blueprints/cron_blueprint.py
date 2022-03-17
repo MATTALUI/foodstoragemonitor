@@ -4,6 +4,7 @@ import json
 
 from models import ItemSet
 from utils import get_warning_date, get_highlight_date
+from hardware_manager import hardware_manager
 
 cron_blueprint = Blueprint('cron_blueprint', __name__)
 
@@ -12,12 +13,14 @@ cron_blueprint = Blueprint('cron_blueprint', __name__)
 ###############################################################################
 @cron_blueprint.route("/cron/test", methods=['POST'])
 def test_cron():
+    hardware_manager.run_test()
     return "All's well!"
 
 @cron_blueprint.route("/cron/check-expiry", methods=['POST'])
 def check_expiry():
     report = build_expiry_report()
     write_expiry_report(report)
+    hardware_manager.accept_report(report)
 
     return json.dumps(report)
 

@@ -1,4 +1,3 @@
 flask
-#Hamlish-Jinja # this guy might error, but installing it manually seems to work?
 SQLAlchemy
 flask_sqlalchemy
