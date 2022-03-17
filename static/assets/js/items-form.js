@@ -38,7 +38,7 @@
 
     $(document.forms[0]).append($input);
     $('.autocomplete').autocomplete({
-      source: "/products-list",
+      source: "/products.json",
     });
   };
 
