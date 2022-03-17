@@ -6,9 +6,10 @@ from gpiozero import LED, Button
 
 class HardwareManager:
     # PIN CONSTANTS
-    PIN_RED = 17
+    PIN_RED   = 17
     PIN_GREEN = 27
-    PIN_BLUE = 22
+    PIN_BLUE  = 22
+    PIN_BTN   = 18
 
     def __init__(self):
         self._last_maintainance = datetime.now()
@@ -16,6 +17,7 @@ class HardwareManager:
         self._led_red = LED(HardwareManager.PIN_RED)
         self._led_green = LED(HardwareManager.PIN_GREEN)
         self._led_blue = LED(HardwareManager.PIN_BLUE)
+        self._btn = Button(HardwareManager.PIN_BTN)
         self._start_thread(self._start_general_button)
 
     def _clear_led(self):
@@ -36,18 +38,13 @@ class HardwareManager:
         self._led_blue.on()
 
     def _led_test(self):
-        print("running led test")
-        print("red")
         self._set_led_red()
         sleep(1)
-        print("green")
         self._set_led_green()
         sleep(1)
-        print("blue")
         self._set_led_blue()
         sleep(1)
         self._clear_led()
-        print("done testing leds")
 
     def _start_general_button(self):
         while True:
@@ -55,13 +52,14 @@ class HardwareManager:
             #general button presses.
             if self._awaiting_button_press:
                 continue
+            self._btn.wait_for_press()
+            self._led_test()
+            self._btn.wait_for_release()
 
     def _await_button_press(self):
         # TODO: Wait for button press
         self._awaiting_button_press = True
-        print("Waiting for button press...")
         self._awaiting_button_press = False
-        print("All done!")
 
     def _start_button_press_thread(self):
         if self._awaiting_button_press:
