@@ -10,3 +10,7 @@ class Product(db.Model):
     item_sets = relationship("ItemSet",  back_populates="product")
     groups = db.relationship('Group', secondary=ProductGroup, lazy='subquery', backref=db.backref('products', lazy=True))
     categories = db.relationship('Category', secondary=ProductCategory, lazy='subquery', backref=db.backref('products', lazy=True))
+
+    @property
+    def total_items(self):
+        return sum(item_set.quantity for item_set in self.item_sets)

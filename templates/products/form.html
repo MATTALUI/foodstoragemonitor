@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Food Store | Edit Product{% endblock %}
+{% block content %}
+  <div class="loader justify-content-center text-secondary d-none">
+    <div class="spinner-border mt-5">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <form action="/products/{{product.id}}" method="POST"  enctype="application/json">
+        <div class="form-group">
+          <input type="text" placeholder="Name" name="name" class="form-control product_name"  value="{{product.name}}" required>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <button class="w-100 btn btn-primary btn-lg saveProductButton">Save Product</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

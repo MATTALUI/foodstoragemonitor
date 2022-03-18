@@ -17,7 +17,7 @@ def storage_items():
     if request.method == 'GET':
         return index()
     elif request.method == 'POST':
-        return create_storage_item()
+        return create()
 
 @itemsets_blueprint.route("/storage-items/<item_set_id>", methods=['DELETE'])
 def item_set(item_set_id):
@@ -106,7 +106,7 @@ def get_item_set_context(item_set):
         return "info"
     return "default"
 
-def create_storage_item():
+def create():
     for item_set_data in json.loads(request.data):
 
         product_name = item_set_data['product_name']
