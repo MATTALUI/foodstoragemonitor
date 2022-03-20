@@ -8,7 +8,7 @@
     }
     if (!confirm(message)) { return; }
 
-    return fetch(`/products/${productId}`, { method: 'DELETE' })
+    return fetch(`/products/${productId}/`, { method: 'DELETE' })
       .then(res => res.json())
       .then(() => {
         $(event.target).closest('.product').remove();

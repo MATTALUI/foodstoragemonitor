@@ -19,7 +19,7 @@
     //     description: $(ele).find('.description').val(),
     //   }));
 
-    fetch('/categories', {
+    fetch('/categories/', {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -27,7 +27,7 @@
     .then(success => {
       setTimeout(() => {
         // Why timeout? I created this beautiful spinner; you're going to look at it!
-        window.location.href = '/categories';
+        window.location.href = '/categories/';
       }, 1000);
     })
     .catch(console.error);

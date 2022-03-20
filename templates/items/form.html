@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Food Store | New Items{% endblock %}
 {% block content %}
+  {% if item_set is defined %}
+    <meta name="item-set-preload" content="{{ item_set.to_json() }}">
+    {% set action = '/storage-items/' + item_set.id|string %}
+  {% else %}
+    {% set action = '/storage-items' %}
+  {% endif %}
   <script src="/assets/js/items-form.js" charset="utf-8" defer></script>
   <div class="loader justify-content-center text-secondary d-none">
     <div class="spinner-border mt-5">
@@ -9,7 +15,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <form action="/storage-items" method="POST"  enctype="application/json">
+      <form action="{{ action }}" method="POST"  enctype="application/json">
         <!-- Body of form is dynamically created in static/assets/js/items-form.js -->
       </form>
       <div class="row">

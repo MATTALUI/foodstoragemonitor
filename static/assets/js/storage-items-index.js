@@ -8,7 +8,7 @@
     const $button = $(event.target);
     const $itemSet = $button.closest('.itemset');
     const itemSetId = $itemSet.data('itemset');
-    const reqPath = `/storage-items/${itemSetId}/${type}`;
+    const reqPath = `/storage-items/${itemSetId}/${type}/`;
     fetch(reqPath, {
       method: 'POST'
     })
@@ -26,7 +26,7 @@
     const $button = $(event.target);
     const $itemSet = $button.closest('.itemset');
     const itemSetId = $itemSet.data('itemset');
-    fetch(`/storage-items/${itemSetId}`, {
+    fetch(`/storage-items/${itemSetId}/`, {
       method: 'DELETE'
     })
     .then(res => res.json())

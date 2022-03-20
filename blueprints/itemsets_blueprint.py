@@ -12,23 +12,30 @@ itemsets_blueprint = Blueprint('itemsets_blueprint', __name__)
 ###############################################################################
 # STORAGE ITEM ROUTES
 ###############################################################################
-@itemsets_blueprint.route("/storage-items", methods=['GET', 'POST'])
+@itemsets_blueprint.route("/storage-items/", methods=['GET', 'POST'])
 def storage_items():
     if request.method == 'GET':
         return index()
     elif request.method == 'POST':
         return create()
 
-@itemsets_blueprint.route("/storage-items/<item_set_id>", methods=['DELETE'])
+@itemsets_blueprint.route("/storage-items/<item_set_id>/edit/", methods=['GET'])
+def edit_item_set(item_set_id):
+    if request.method == 'GET':
+        return edit(item_set_id)
+
+@itemsets_blueprint.route("/storage-items/<item_set_id>/", methods=['POST','DELETE'])
 def item_set(item_set_id):
     if request.method == 'DELETE':
-        return delete_item_set(item_set_id)
+        return destroy(item_set_id)
+    elif request.method == 'POST':
+        return update(item_set_id)
 
-@itemsets_blueprint.route("/storage-items/new")
-def new_item():
+@itemsets_blueprint.route("/storage-items/new/")
+def new():
     return render_template('items/form.html')
 
-@itemsets_blueprint.route("/storage-items/<item_set_id>/increment", methods=['POST'])
+@itemsets_blueprint.route("/storage-items/<item_set_id>/increment/", methods=['POST'])
 def increment_item_set(item_set_id):
     item_set = ItemSet.query.get(item_set_id)
     item_set.quantity += 1
@@ -36,7 +43,7 @@ def increment_item_set(item_set_id):
     db.session.commit()
     return 'true'
 
-@itemsets_blueprint.route("/storage-items/<item_set_id>/decrement", methods=['POST'])
+@itemsets_blueprint.route("/storage-items/<item_set_id>/decrement/", methods=['POST'])
 def decrement_item_set(item_set_id):
     item_set = ItemSet.query.get(item_set_id)
     item_set.quantity -= 1
@@ -75,7 +82,6 @@ def build_product_name_items_table(item_sets, order="asc"):
                 "product_id": item_set.product_id,
                 "item_sets": []
             }
-        print(type(item_set.expiration))
         table_items[item_set.product_id]["item_sets"].append({
             "data": item_set,
             "context": get_item_set_context(item_set)
@@ -90,7 +96,6 @@ def build_product_name_items_table(item_sets, order="asc"):
 
     # Convert to array and order by product_name
     linear_table.sort(key=lambda d: d['product_name'].lower(), reverse=order=="desc")
-    print(linear_table)
 
     return linear_table
 
@@ -106,27 +111,36 @@ def get_item_set_context(item_set):
         return "info"
     return "default"
 
-def create():
+def upsert_item_set():
     for item_set_data in json.loads(request.data):
-
         product_name = item_set_data['product_name']
         product = Product.query.filter(func.lower(Product.name)==product_name.lower()).first()
         if product is None:
             product = Product(name=product_name)
             db.session.add(product)
             db.session.commit()
-        db.session.add(ItemSet(
-            product_id=product.id,
-            description=item_set_data['description'],
-            quantity=item_set_data['quantity'],
-            expiration=datetime.strptime(item_set_data['expiration'], '%Y-%m-%d'),
-        ))
-
+        item_set = ItemSet()
+        if 'id' in item_set_data:
+            item_set = ItemSet.query.get(item_set_data['id'])
+        item_set.product_id=product.id
+        item_set.description=item_set_data['description']
+        item_set.quantity=item_set_data['quantity']
+        item_set.expiration=datetime.strptime(item_set_data['expiration'], '%Y-%m-%d')
+        db.session.add(item_set)
     db.session.commit()
-
     return 'true'
 
-def delete_item_set(item_set_id):
+def create():
+    return upsert_item_set()
+
+def update(item_set_id):
+    return upsert_item_set()
+
+def edit(item_set_id):
+    item_set = ItemSet.query.get(item_set_id)
+    return render_template('items/form.html', item_set=item_set)
+
+def destroy(item_set_id):
     item_set = ItemSet.query.get(item_set_id)
     db.session.delete(item_set)
     db.session.commit()

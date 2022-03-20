@@ -1,3 +1,4 @@
+import json
 from sqlalchemy.orm import relationship
 
 from .db import db
@@ -13,3 +14,12 @@ class ItemSet(db.Model):
     @property
     def product_name(self):
         return self.product.name
+
+    def to_json(self):
+        return json.dumps({
+            "id": self.id,
+            "product_name" : self.product_name,
+            "expiration" : self.expiration.strftime("%Y-%m-%d"),
+            "quantity" : self.quantity,
+            "description" : self.description,
+        })
