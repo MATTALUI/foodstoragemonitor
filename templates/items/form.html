@@ -13,14 +13,19 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div class="row">
+  <div class="row mb-3">
     <div class="col-sm-12">
       <form action="{{ action }}" method="POST"  enctype="application/json">
         <!-- Body of form is dynamically created in static/assets/js/items-form.js -->
       </form>
       <div class="row">
+        <div class="col-sm-8">
+          <button class="w-100 btn btn-primary saveItemsButton">Save Item(s)</button>
+        </div>
         <div class="col-sm-2">
-          <button class="w-100 btn btn-primary btn-lg saveItemsButton">Save Item(s)</button>
+          {% if item_set is not defined %}
+            <button class="w-100 btn btn-success addItemButton">Add Another Item</button>
+          {% endif %}
         </div>
       </div>
     </div>

@@ -11,19 +11,12 @@
       description: '',
       expiration: '',
       quantity: '',
-    }
-    console.log(itemSet);
+    };
     const nextIndex = document.querySelectorAll('.item_set').length;
-    const actionButton = nextIndex === 0
-      ? (`<button class="w-100 btn btn-success addItemButton">Add Another Item</button>`)
-      : (`<button class="w-100 btn btn-danger removeItemButton">Remove This Item</button>`);
     const $input = $(`
       <div class="item_set row">
         ${itemSet.id ? `<input class="id" type="hidden" name="id" value="${itemSet.id}">` : ''}
-        <div class="col-sm-2">
-          ${actionButton}
-        </div>
-        <div class="col-sm-8">
+        <div class="col-sm-10">
           <div class="row  border-bottom border-primary mb-3">
             <div class="col-sm-12">
               <div class="form-group ui-front">
@@ -46,6 +39,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="col-sm-2">
+          ${editMode ? '' : '<button class="w-100 btn btn-danger removeItemButton">Remove This Item</button>'}
         </div>
       </div>
     `);
