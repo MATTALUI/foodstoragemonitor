@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template
 import json
+from sqlalchemy import func
 from models import db, Category
 
 categories_blueprint = Blueprint('categories_blueprint', __name__)
@@ -21,7 +22,11 @@ def new_category():
 
 def index():
     # TODO: we can change sorts  here
-    categories = Category.query.all()
+    search = request.args.get("search") or None
+    categories = categories = Category.query
+    if search is not None:
+        categories = categories.filter(func.lower(Category.name).contains(search.lower()))
+    categories = categories.all()
     return render_template(
         'categories/index.html',
         params=request.args,

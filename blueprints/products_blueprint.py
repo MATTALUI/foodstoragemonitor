@@ -35,7 +35,12 @@ def edit_product(product_id):
 
 def index():
     # TODO: We can change sorting here.
-    products = Product.query.order_by(func.lower(Product.name).asc()).all()
+    search = request.args.get("search") or None
+    products = Product.query
+    if search is not None:
+        products = products.filter(func.lower(Product.name).contains(search.lower()))
+
+    products = products.order_by(func.lower(Product.name).asc()).all()
     return render_template(
         'products/index.html',
         params=request.args,
