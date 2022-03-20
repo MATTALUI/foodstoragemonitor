@@ -11,12 +11,12 @@ cron_blueprint = Blueprint('cron_blueprint', __name__)
 ###############################################################################
 # CRON ROUTES
 ###############################################################################
-@cron_blueprint.route("/cron/test", methods=['POST'])
+@cron_blueprint.route("/cron/test/", methods=['POST'])
 def test_cron():
     hardware_manager.run_test()
     return "All's well!\n"
 
-@cron_blueprint.route("/cron/check-expiry", methods=['POST'])
+@cron_blueprint.route("/cron/check-expiry/", methods=['POST'])
 def check_expiry():
     report = build_expiry_report()
     write_expiry_report(report)

@@ -13,7 +13,7 @@
       <div class="col-sm-2">
         <input type="submit" value="Search" class="btn btn-primary w-100" />
       </div>
-      <div class="form-group col-sm-5">
+      <div class="form-group col-sm-7">
         <input type="text" name="search" class="form-control w-100" id="search" placeholder="Search" value="{{params.get('search') or ''}}">
       </div>
       <div class=" col-sm-2">
@@ -26,14 +26,14 @@
             {% endfor %}
           </select>
       </div>
-      <div class="col-sm-2">
+      <!-- <div class="col-sm-2">
         <select class="form-control w-100" name="group">
             <option value="">Group</option>
             {% for group in groups %}
               <option value="{{ group.id }}" {{ 'selected' if group.id == (params.get('group') | int) else ''}}>{{ group.name }}</option>
             {% endfor %}
           </select>
-      </div>
+      </div> -->
       <div class="col-sm-1">
         <a href="/" class="btn btn-secondary">Clear</a>
       </div>

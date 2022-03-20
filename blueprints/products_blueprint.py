@@ -8,19 +8,19 @@ products_blueprint = Blueprint('products_blueprint', __name__)
 ###############################################################################
 # PRODUCTS ROUTES
 ###############################################################################
-@products_blueprint.route("/products.json", methods=['GET'])
+@products_blueprint.route("/products.json/", methods=['GET'])
 def get_products_list():
     if request.method == 'GET':
         return products_list()
 
-@products_blueprint.route("/products", methods=['GET', 'POST'])
+@products_blueprint.route("/products/", methods=['GET', 'POST'])
 def products():
     if request.method == 'GET':
         return index()
     elif request.method == 'POST':
         return create()
 
-@products_blueprint.route("/products/<product_id>", methods=['GET', 'POST', 'DELETE'])
+@products_blueprint.route("/products/<product_id>/", methods=['GET', 'POST', 'DELETE'])
 def item_set(product_id):
     if request.method == 'GET':
         return product_id
@@ -29,7 +29,7 @@ def item_set(product_id):
     elif request.method == 'DELETE':
         return destroy(product_id)
 
-@products_blueprint.route("/products/<product_id>/edit", methods=['get'])
+@products_blueprint.route("/products/<product_id>/edit/", methods=['get'])
 def edit_product(product_id):
     return edit(product_id)
 

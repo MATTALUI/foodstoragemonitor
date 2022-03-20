@@ -7,14 +7,14 @@ categories_blueprint = Blueprint('categories_blueprint', __name__)
 ###############################################################################
 # CATEGORY ROUTES
 ###############################################################################
-@categories_blueprint.route("/categories", methods=['GET', 'POST'])
+@categories_blueprint.route("/categories/", methods=['GET', 'POST'])
 def categories():
     if request.method == 'GET':
         return index()
     elif request.method == 'POST':
         return create()
 
-@categories_blueprint.route("/categories/new")
+@categories_blueprint.route("/categories/new/")
 def new_category():
     return render_template('categories/form.html')
 

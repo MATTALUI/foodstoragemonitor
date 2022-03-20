@@ -6,6 +6,6 @@ root_blueprint = Blueprint('root_blueprint', __name__)
 def root():
     return redirect("/storage-items")
 
-@root_blueprint.route('/assets/<path:path>')
+@root_blueprint.route('/assets/<path:path>/')
 def send_asset(path):
     return send_from_directory('static/assets', path)

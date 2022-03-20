@@ -11,7 +11,7 @@
         <input type="text" name="search" class="form-control w-100" id="search" placeholder="Search" value="{{params.get('search') or ''}}">
       </div>
       <div class="col-sm-1">
-        <a href="/" class="btn btn-secondary">Clear</a>
+        <a href="/products/" class="btn btn-secondary">Clear</a>
       </div>
     </div>
   </form>
@@ -38,7 +38,7 @@
               <td>{{product.name}}</td>
               <td class="quantity">{{product.total_items}}</td>
               <td class="d-flex justify-content-end">
-                <a href="/products/{{product.id}}/edit" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/products/{{product.id}}/edit/" class="btn btn-sm btn-warning">Edit</a>
                 <a class="btn btn-sm btn-danger delete">Delete</a>
               </td>
             </tr>
