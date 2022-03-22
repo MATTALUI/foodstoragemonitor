@@ -29,7 +29,7 @@ def item_set(product_id):
     elif request.method == 'DELETE':
         return destroy(product_id)
 
-@products_blueprint.route("/products/<product_id>/edit/", methods=['get'])
+@products_blueprint.route("/products/<product_id>/edit/", methods=['GET'])
 def edit_product(product_id):
     return edit(product_id)
 
@@ -55,6 +55,8 @@ def edit(product_id):
     )
 
 def create():
+    # Because we really only create products
+    # through the itemset form at this point
     pass
 
 def update(product_id):

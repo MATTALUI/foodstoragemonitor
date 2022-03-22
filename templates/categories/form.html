@@ -9,9 +9,12 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <form action="/categories" method="POST"  enctype="application/json">
+      <form action="/categories/{{category.id|string + "/" if category is defined else '' }}" method="POST"  enctype="application/json">
+        {% if category is defined %}
+          <input type="hidden" name="id" value="{{category.id}}">
+        {% endif %}
         <div class="form-group">
-          <input type="text" placeholder="Name" name="name" class="form-control product_name" required>
+          <input type="text" placeholder="Name" name="name" class="form-control product_name" required value="{{category.name if category is defined else '' }}">
         </div>
       </form>
       <div class="row">

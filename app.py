@@ -9,6 +9,7 @@ cwd = os.getcwd()
 app = Flask(__name__)
 db_path = "sqlite:///" + cwd + "/" + config.DATABASE_NAME + ".db"
 app.config['SQLALCHEMY_DATABASE_URI'] = db_path
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 with app.app_context():

@@ -5,21 +5,13 @@
   };
 
   const saveCategory = (event, options={}) => {
-    console.log('cats');
     toggleSpinner();
     const data = {
+      id: $('input[name="id"]').val(),
       name: $('input[name="name"]').val(),
     };
-    // const data = Array
-    //   .from(document.querySelectorAll('.item_set'))
-    //   .map(ele => ({
-    //     product_name: $(ele).find('.product_name').val(),
-    //     expiration: $(ele).find('.expiration').val(),
-    //     quantity: $(ele).find('.quantity').val(),
-    //     description: $(ele).find('.description').val(),
-    //   }));
 
-    fetch('/categories/', {
+    fetch(`/categories/${!!data.id ? `${data.id}/`: ''}`, {
       method: 'POST',
       body: JSON.stringify(data),
     })
