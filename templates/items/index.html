@@ -10,13 +10,13 @@
 {% block content %}
   <form>
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-md-2 col-sm-12 pb-3">
         <input type="submit" value="Search" class="btn btn-primary w-100" />
       </div>
-      <div class="form-group col-sm-7">
+      <div class="form-group col-sm-12 col-md-7">
         <input type="text" name="search" class="form-control w-100" id="search" placeholder="Search" value="{{params.get('search') or ''}}">
       </div>
-      <div class=" col-sm-2">
+      <div class="form-group col-md-2 col-sm-12">
         <select class="form-control w-100" name="category">
             <option value="">Category</option>
             {% for category in categories %}
@@ -26,16 +26,8 @@
             {% endfor %}
           </select>
       </div>
-      <!-- <div class="col-sm-2">
-        <select class="form-control w-100" name="group">
-            <option value="">Group</option>
-            {% for group in groups %}
-              <option value="{{ group.id }}" {{ 'selected' if group.id == (params.get('group') | int) else ''}}>{{ group.name }}</option>
-            {% endfor %}
-          </select>
-      </div> -->
-      <div class="col-sm-1">
-        <a href="/" class="btn btn-secondary">Clear</a>
+      <div class="col-md-1 col-sm-12 form-group">
+        <a href="/" class="btn btn-secondary w-100">Clear</a>
       </div>
     </div>
   </form>
@@ -60,11 +52,11 @@
               Quantity
               <!-- <i class="fas fa-sort"></i> -->
             </th>
-            <th>
+            <th class="d-none d-md-table-cell">
               Description
               <!-- <i class="fas fa-sort"></i> -->
             </th>
-            <th></th>
+            <th class="d-none d-md-table-cell"></th>
           </tr>
         </thead>
         <tbody>
@@ -79,8 +71,8 @@
                 {% endif %}
                 <td class="expiration">{{ item_set['data']['expiration'].strftime("%m/%d/%Y") }}</td>
                 <td class="quantity">{{ item_set['data']['quantity'] }}</td>
-                <td class="description">{{ item_set['data']['description'] or '' }}</td>
-                <td class="d-flex justify-content-end">
+                <td class="description d-none d-md-table-cell">{{ item_set['data']['description'] or '' }}</td>
+                <td class="justify-content-end d-none d-md-flex">
                   <div class="btn-group">
                     <a class="btn btn-sm btn-secondary increment">Increment</a>
                     <a class="btn btn-sm btn-secondary decrement">Decrement</a>
