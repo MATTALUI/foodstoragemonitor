@@ -4,4 +4,6 @@ from .group import Group
 from .item_set import ItemSet
 from .product import Product
 from .product_category import ProductCategory
+from .item_set_category import ItemSetCategory
 from .product_group import ProductGroup
+from .seed import run_seeds
