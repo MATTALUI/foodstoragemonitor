@@ -9,6 +9,8 @@
     const data = {
       id: $('input[name="id"]').val(),
       name: $('input[name="name"]').val(),
+      bg_hex: $('input[name="bg_hex"]').val(),
+      text_hex: $('input[name="text_hex"]').val(),
     };
 
     fetch(`/categories/${!!data.id ? `${data.id}/`: ''}`, {
@@ -23,8 +25,16 @@
       }, 1000);
     })
     .catch(console.error);
-
   };
+
+  const displayChipPreview = () => {
+    $('#chip-preview').empty();
+    const name = $('input[name="name"]').val();
+    const bg = $('input[name="bg_hex"]').val();
+    const text = $('input[name="text_hex"]').val();
+    if (!name || !bg || !text) { return; }
+    $('#chip-preview').append(`<span class="badge" style="background-color: ${bg}; color: ${text}">${name}</span>`);
+  }
 
   const preventDefaultAndHandle = handler => event => {
     event.preventDefault();
@@ -32,4 +42,6 @@
   };
 
   $('.saveCategoryButton').on('click', preventDefaultAndHandle(saveCategory));
+  $('form').on('change', preventDefaultAndHandle(displayChipPreview));
+  displayChipPreview();
 })();

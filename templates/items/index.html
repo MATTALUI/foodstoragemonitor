@@ -56,6 +56,7 @@
               Description
               <!-- <i class="fas fa-sort"></i> -->
             </th>
+            <th class="d-none d-md-table-cell">Categories</th>
             <th class="d-none d-md-table-cell"></th>
           </tr>
         </thead>
@@ -69,9 +70,14 @@
                     {{ product_data['product_name'] }}
                   </td>
                 {% endif %}
-                <td class="expiration">{{ item_set['data']['expiration'].strftime("%m/%d/%Y") }}</td>
-                <td class="quantity">{{ item_set['data']['quantity'] }}</td>
-                <td class="description d-none d-md-table-cell">{{ item_set['data']['description'] or '' }}</td>
+                <td class="expiration">{{ item_set['data'].expiration.strftime("%m/%d/%Y") }}</td>
+                <td class="quantity">{{ item_set['data'].quantity }}</td>
+                <td class="description d-none d-md-table-cell">{{ item_set['data'].description or '' }}</td>
+                <td class="categories  d-none d-md-table-cell">
+                  {% for category in item_set['data'].categories %}
+                    {{ category.to_chip_ele()|safe }}
+                  {% endfor %}
+                </td>
                 <td class="justify-content-end d-none d-md-flex">
                   <div class="btn-group">
                     <a class="btn btn-sm btn-secondary increment">Increment</a>

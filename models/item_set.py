@@ -1,5 +1,6 @@
 import json
 from sqlalchemy.orm import relationship
+from .item_set_category import ItemSetCategory
 
 from .db import db
 
@@ -10,6 +11,7 @@ class ItemSet(db.Model):
     expiration = db.Column(db.Date, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
+    categories = db.relationship('Category', secondary=ItemSetCategory, lazy='subquery', backref=db.backref('item_sets', lazy=True))
 
     @property
     def product_name(self):

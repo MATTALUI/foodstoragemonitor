@@ -28,23 +28,21 @@
         <thead class="thead-dark">
           <tr>
             <th>
-              Name
+              Category
               <!-- <span class="d-flex flex-column">
                   <i class="fas fa-sort-up"></i>
                   <i class="fas fa-sort-down"></i>
 
                 </span> -->
             </th>
-            <th>
-              Products In Category
-            </th>
+            <th>Products In Category</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {% for category in categories %}
             <tr class="category" data-category="{{ category.id }}">
-              <td class="name">{{ category.name }}</td>
+              <td class="name">{{ category.to_chip_ele()|safe }}</td>
               <td class="products">{{ category.products|length }}</td>
               <td class="d-flex justify-content-end">
                 <div class="btn-group">

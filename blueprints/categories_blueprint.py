@@ -49,8 +49,6 @@ def new():
 
 def edit(category_id):
     category = Category.query.get(category_id)
-    print(category)
-    print(category.name)
     return render_template('categories/form.html', category=category)
 
 def create():
@@ -61,11 +59,12 @@ def update(category_id):
 
 def upsert_category():
     data = json.loads(request.data)
-    # cat = Category(**data)
     cat = Category()
     if 'id' in data:
         cat = Category.query.get(data['id'])
     cat.name = data['name']
+    cat.bg_hex = data['bg_hex']
+    cat.text_hex = data['text_hex']
     db.session.add(cat)
     db.session.commit()
     return 'true'
