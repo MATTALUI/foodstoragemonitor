@@ -1,7 +1,7 @@
 (() => {
   const deleteCategory = (event) => {
     const $category = $(event.target).closest('.category');
-    const catName = $category.find('.name').html();
+    const catName = $category.find('.name').find('.badge').html();
     const catId = $category.data('category');
     const message = `Are you sure you want to delete the ${catName} category? This can not be undone.`;
 

@@ -37,16 +37,10 @@
         <thead class="thead-dark">
           <tr>
             <th>
-              Name
-              <!-- <span class="d-flex flex-column">
-                  <i class="fas fa-sort-up"></i>
-                  <i class="fas fa-sort-down"></i>
-
-                </span> -->
+                {{ build_sortable_column('name', params)|safe }}
             </th>
             <th>
-              Expiration
-              <!-- <i class="fas fa-sort"></i> -->
+              {{ build_sortable_column('expiration', params)|safe }}
             </th>
             <th>
               Quantity
@@ -94,7 +88,7 @@
       </table>
       {% if items_table|length == 0 %}
         <div class="alert alert-info">
-          You have not added any items to storage yet.
+          There's nothing here!
         </div>
       {% endif %}
     </div>

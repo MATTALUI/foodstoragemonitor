@@ -5,7 +5,7 @@ from datetime import date, datetime
 import json
 
 from models import db, ItemSet, Category, Group, Product
-from utils import get_warning_date, get_highlight_date
+from utils import get_warning_date, get_highlight_date, build_sortable_column
 
 itemsets_blueprint = Blueprint('itemsets_blueprint', __name__)
 
@@ -65,13 +65,18 @@ def manage_categories(item_set_id):
 def index():
     # Extract Search Params
     search = request.args.get("search") or None
+    sort = request.args.get("sort") or 'name'
+    order = request.args.get("order") or 'asc'
 
     item_sets = ItemSet.query
     if search is not None:
         item_sets = item_sets.join(Product).filter(func.lower(Product.name).contains(search.lower()))
     item_sets = item_sets.options(joinedload(ItemSet.product)).all()
-    # TODO: we can change sorts  here
-    items_table = build_product_name_items_table(item_sets)
+    items_table = []
+    if sort == 'name':
+        items_table = build_product_name_items_table(item_sets, order)
+    elif sort == 'expiration':
+        items_table = build_product_expiration_items_table(item_sets, order)
     categories = Category.query.all()
     groups = Group.query.all()
     return render_template(
@@ -81,6 +86,7 @@ def index():
         item_sets=item_sets,
         categories=categories,
         groups=groups,
+        build_sortable_column=build_sortable_column
     )
 
 def build_product_name_items_table(item_sets, order="asc"):
@@ -109,6 +115,18 @@ def build_product_name_items_table(item_sets, order="asc"):
     linear_table.sort(key=lambda d: d['product_name'].lower(), reverse=order=="desc")
 
     return linear_table
+
+def build_product_expiration_items_table(item_sets, order="asc"):
+    item_sets.sort(key=lambda item_set: item_set.expiration, reverse=order=="desc")
+
+    return [{
+        "product_name": item_set.product_name,
+        "product_id": item_set.product_id,
+        "item_sets": [{
+            "data": item_set,
+            "context": get_item_set_context(item_set)
+        }]
+    } for item_set in item_sets]
 
 def get_item_set_context(item_set):
     ignorable_item = item_set.is_ignorable
