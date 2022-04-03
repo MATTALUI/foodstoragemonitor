@@ -25,6 +25,13 @@ class ItemSet(db.Model):
                 return True
         return False
 
+    @property
+    def is_drinkable(self):
+        for cat in self.categories:
+            if cat.name == Category.DRINKABLE_NAME:
+                return True
+        return False
+
     def to_json(self):
         return json.dumps({
             "id": self.id,

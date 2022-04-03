@@ -1,6 +1,8 @@
 DATABASE_NAME = 'database'
 WARNING_WEEKS = 2
 HIGHLIGHT_WEEKS = 4
+FAMILY_MEMBER_COUNT = 3
+MEALS_PER_DAY_COUNT = 3
 BANNER = """
  ___   __    __  ___   ___  ____  __  ___    __   __  ___
 (  _) /  \  /  \(   \ / __)(_  _)/  \(  ,)  (  ) / _)(  _)
