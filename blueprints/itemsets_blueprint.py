@@ -111,7 +111,10 @@ def build_product_name_items_table(item_sets, order="asc"):
     return linear_table
 
 def get_item_set_context(item_set):
+    ignorable_item = item_set.is_ignorable
     # Check if already expired
+    if item_set.expiration < date.today() and ignorable_item:
+        return "dark"
     if item_set.expiration < date.today():
         return "danger"
     # Check if expiry in next 2 weeks

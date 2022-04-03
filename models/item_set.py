@@ -1,6 +1,7 @@
 import json
 from sqlalchemy.orm import relationship
 from .item_set_category import ItemSetCategory
+from .category import Category
 
 from .db import db
 
@@ -16,6 +17,13 @@ class ItemSet(db.Model):
     @property
     def product_name(self):
         return self.product.name
+
+    @property
+    def is_ignorable(self):
+        for cat in self.categories:
+            if cat.name == Category.IGNORABLE_EXPIRY_NAME:
+                return True
+        return False
 
     def to_json(self):
         return json.dumps({

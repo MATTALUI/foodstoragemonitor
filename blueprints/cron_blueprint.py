@@ -2,7 +2,7 @@ from flask import Blueprint
 from datetime import date, datetime
 import json
 
-from models import ItemSet
+from models import ItemSet, Category
 from utils import get_warning_date, get_highlight_date
 from hardware_manager import hardware_manager
 
@@ -25,12 +25,16 @@ def check_expiry():
     return json.dumps(report) + "\n"
 
 def build_expiry_report():
-    expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).count()
+    expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).all()
+    expired_items_count = 0
+    for item in expired_items:
+        if not item.is_ignorable:
+            expired_items_count += 1
     warning_items = ItemSet.query.filter(ItemSet.expiration < get_warning_date()).filter(ItemSet.expiration >= date.today()).count()
     highlight_items = ItemSet.query.filter(ItemSet.expiration < get_highlight_date()).filter(ItemSet.expiration >= get_warning_date()).count()
 
     return {
-        "expired": expired_items,
+        "expired": expired_items_count,
         "warning": warning_items,
         "highlight": highlight_items,
     }
