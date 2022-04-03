@@ -4,7 +4,6 @@ import os
 import blueprints
 import config
 from models import db, run_seeds
-from banner import banner
 
 cwd = os.getcwd()
 app = Flask(__name__)
@@ -24,4 +23,4 @@ app.register_blueprint(blueprints.products_blueprint)   # "/products" routes
 app.register_blueprint(blueprints.groups_blueprint)     # "/groups" routes
 app.register_blueprint(blueprints.cron_blueprint)       # "/cron" routes
 
-print(banner)
+print(config.BANNER)

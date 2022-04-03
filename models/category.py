@@ -13,4 +13,12 @@ class Category(db.Model):
         return cls.query.filter(cls.name==cls.IGNORABLE_EXPIRY_NAME).first()
 
     def to_chip_ele(self):
-        return f"<span class=\"badge\" style=\"background-color: {self.bg_hex}; color: {self.text_hex}\">{self.name}</span>"
+        return f"<span class=\"badge category\" style=\"background-color: {self.bg_hex}; color: {self.text_hex}\" data-category=\"{self.id}\">{self.name}</span>"
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "bg_hex": self.bg_hex,
+            "text_hex": self.text_hex
+        }

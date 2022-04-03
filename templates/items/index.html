@@ -82,6 +82,7 @@
                   <div class="btn-group">
                     <a class="btn btn-sm btn-secondary increment">Increment</a>
                     <a class="btn btn-sm btn-secondary decrement">Decrement</a>
+                    <a class="btn btn-sm btn-secondary manage-categories">Categories</a>
                     <a class="btn btn-sm btn-warning" href="/storage-items/{{item_set['data']['id']}}/edit">Edit</a>
                     <a class="btn btn-sm btn-danger delete">Delete</a>
                   </div>
@@ -96,6 +97,28 @@
           You have not added any items to storage yet.
         </div>
       {% endif %}
+    </div>
+  </div>
+  <div id="category-modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Manage Categories</span>
+        </div>
+        <div class="modal-body">
+          <select id="category-manager" multiple class="form-control w-100" name="category">
+            {% for category in categories %}
+              <option value="{{ category.id }}">
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary close-modal">Close</button>
+          <button type="button" class="btn btn-primary save-categories">Save changes</button>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

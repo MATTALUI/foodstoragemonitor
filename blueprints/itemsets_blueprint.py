@@ -51,6 +51,17 @@ def decrement_item_set(item_set_id):
     db.session.commit()
     return 'true'
 
+@itemsets_blueprint.route("/storage-items/<item_set_id>/set-categories/", methods=['POST'])
+def manage_categories(item_set_id):
+    category_ids = json.loads(request.data)['categories']
+    item_set = ItemSet.query.get(item_set_id)
+    categories = Category.query.filter(Category.id.in_(category_ids)).all()
+    item_set.categories = categories
+    db.session.add(item_set)
+    db.session.commit()
+
+    return json.dumps([cat.to_dict() for cat in categories])
+
 def index():
     # Extract Search Params
     search = request.args.get("search") or None
