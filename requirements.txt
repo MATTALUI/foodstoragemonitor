@@ -1,3 +1,6 @@
 flask
 SQLAlchemy
 flask_sqlalchemy
+pyopenssl
+beautifulsoup4
+requests

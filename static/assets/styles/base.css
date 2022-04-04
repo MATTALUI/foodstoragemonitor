@@ -27,3 +27,11 @@
 .clickable {
   cursor: pointer;
 }
+
+canvas.drawingBuffer {
+  display: none;
+}
+
+#scanner-stream {
+  overflow: hidden;
+}
