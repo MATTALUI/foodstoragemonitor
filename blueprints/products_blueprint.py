@@ -99,7 +99,7 @@ def query_upc():
             url = f"https://www.upcdatabase.com/item/{upc}"
             html_text = requests.get(url).text
             soup = BeautifulSoup(html_text, 'html.parser')
-            name = soup.find_all('td')[8].text
+            name =  soup.find_all('td')[8].text.title()
             size = soup.find_all('td')[11].text
             product = Product(name=name)
 

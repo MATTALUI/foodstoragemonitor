@@ -1,5 +1,6 @@
 (() => {
   const scannerModal = new bootstrap.Modal(document.getElementById('scanner-modal'));
+  let upcLookupData = null;
   let scannerEnabled = window.location.protocol == 'https:';
   let itemSetSelection = null;
   let itemSet = null;
@@ -120,6 +121,7 @@
       .map(ele => ({
         id: $(ele).find('.id').val(),
         product_name: $(ele).find('.product_name').val(),
+        product_upc: $(ele).find('.product_upc').val(), // May not even exist
         expiration: $(ele).find('.expiration').val(),
         quantity: $(ele).find('.quantity').val(),
         description: $(ele).find('.description').val(),
@@ -145,6 +147,7 @@
 
   const closeScanner = event => {
     itemSetSelection = null;
+    upcLookupData = null;
     Quagga.stop();
     $('#scanner-stream').empty();
     scannerModal.hide();
@@ -188,8 +191,49 @@
             .then((productData) => {
               setTimeout(() => {
                 console.log(productData);
-                if (productData.is_new) {
-                  console.log('confirm with the user');
+                stopScannerLoading();
+                if (productData.error) {
+                  const $warning = $(`
+                    <div>
+                      <div>
+                        <p class="h3 text-center">An error has occured. We were unable to ind information for code: ${data.codeResult.code}</p>
+                      </div>
+                      <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary retry">Retry</button>
+                      </div>
+                    </div>
+                  `);
+                  $warning.find('.retry').on('click', (_) => {
+                    closeScanner(event);
+                    setTimeout(() => openScanner(event), 400);
+
+                  });
+                  $('#scanner-stream').html($warning);
+                } else if (productData.is_new) {
+                  upcLookupData = productData;
+                  const $confirm = $(`
+                    <div>
+                      <div>
+                        <p class="h3 text-center">${productData.product.name}</p>
+                        <p class="text-center">Is this correct?</p>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <button class="btn btn-secondary retry">No, Retry.</button>
+                        <button class="btn btn-primary confirm">Yes!</button>
+                      </div>
+                    </div>
+                  `);
+                  $confirm.find('.confirm').on('click', (_) => {
+                    itemSetSelection.find('.product_name').val(productData.product.name);
+                    itemSetSelection.append(`<input type="hidden" class="product_upc" value="${data.codeResult.code}">`);
+                    closeScanner();
+                  });
+                  $confirm.find('.retry').on('click', (_) => {
+                    closeScanner(event);
+                    setTimeout(() => openScanner(event), 400);
+
+                  });
+                  $('#scanner-stream').html($confirm);
                 } else {
                   itemSetSelection.find('.product_name').val(productData.product.name);
                   closeScanner();
