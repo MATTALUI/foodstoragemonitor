@@ -2,6 +2,7 @@ from flask import Blueprint
 from datetime import date, datetime
 import json
 
+import config
 from models import ItemSet, Category
 from utils import get_warning_date, get_highlight_date
 from hardware_manager import hardware_manager
@@ -23,6 +24,30 @@ def check_expiry():
     hardware_manager.accept_report(report)
 
     return json.dumps(report) + "\n"
+
+@cron_blueprint.route("/cron/check-longevity/", methods=['POST'])
+def check_longevity():
+    items = ItemSet.query.all()
+    edible_count = 0
+    drinkable_count = 0
+    consumption_rate = config.FAMILY_MEMBER_COUNT * config.MEALS_PER_DAY_COUNT
+
+    for item in items:
+        if item.is_drinkable:
+            drinkable_count += item.quantity
+        else:
+            edible_count += item.quantity
+
+    edible_longevity = edible_count / consumption_rate
+    drinkable_longevity = drinkable_count / consumption_rate
+
+    return json.dumps({
+        "drinkable_count": drinkable_count,
+        "edible_count": edible_count,
+        "consumption_rate": consumption_rate,
+        "edible_longevity": edible_longevity,
+        "drinkable_longevity": drinkable_longevity,
+    }) + "\n"
 
 def build_expiry_report():
     expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).all()

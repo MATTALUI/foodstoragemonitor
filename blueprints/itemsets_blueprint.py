@@ -149,6 +149,8 @@ def upsert_item_set():
         product = Product.query.filter(func.lower(Product.name)==product_name.lower()).first()
         if product is None:
             product = Product(name=product_name)
+            if 'product_upc' in item_set_data:
+                product.upc_code = item_set_data['product_upc']
             db.session.add(product)
             db.session.commit()
         item_set = ItemSet()

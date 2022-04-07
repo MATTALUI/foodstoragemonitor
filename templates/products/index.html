@@ -28,6 +28,7 @@
 
                 </span> -->
             </th>
+            <th>UPC Code</th>
             <th>Total Items</th>
             <th></th>
           </tr>
@@ -36,6 +37,7 @@
           {% for product in products %}
             <tr class="product" data-product="{{product.id}}">
               <td>{{product.name}}</td>
+              <td>{{product.upc_code or ''}}</td>
               <td class="quantity">{{product.total_items}}</td>
               <td class="d-flex justify-content-end">
                 <a href="/products/{{product.id}}/edit/" class="btn btn-sm btn-warning">Edit</a>
