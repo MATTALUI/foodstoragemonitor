@@ -35,7 +35,7 @@
 
                 </span> -->
             </th>
-            <th>Products In Category</th>
+            <th>Items In Category</th>
             <th></th>
           </tr>
         </thead>
@@ -43,7 +43,7 @@
           {% for category in categories %}
             <tr class="category" data-category="{{ category.id }}">
               <td class="name">{{ category.to_chip_ele()|safe }}</td>
-              <td class="products">{{ category.products|length }}</td>
+              <td class="products">{{ category.item_count }}</td>
               <td class="d-flex justify-content-end">
                 <div class="btn-group">
                   <a href="/categories/{{category.id}}/edit/" class="btn btn-sm btn-warning">Edit</a>

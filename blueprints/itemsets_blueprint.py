@@ -65,12 +65,15 @@ def manage_categories(item_set_id):
 def index():
     # Extract Search Params
     search = request.args.get("search") or None
+    category_id = request.args.get("category") or None
     sort = request.args.get("sort") or 'name'
     order = request.args.get("order") or 'asc'
 
     item_sets = ItemSet.query
     if search is not None:
         item_sets = item_sets.join(Product).filter(func.lower(Product.name).contains(search.lower()))
+    if category_id is not None:
+        item_sets = item_sets.join(ItemSet.categories).filter(Category.id==category_id)
     item_sets = item_sets.options(joinedload(ItemSet.product)).all()
     items_table = []
     if sort == 'name':

@@ -17,6 +17,10 @@ class Category(db.Model):
     def get_drinkable(cls):
         return cls.query.filter(cls.name==cls.DRINKABLE_NAME).first()
 
+    @property
+    def item_count(self):
+        return sum([item.quantity for item in self.item_sets])
+
     def to_chip_ele(self):
         return f"<span class=\"badge category\" style=\"background-color: {self.bg_hex}; color: {self.text_hex}\" data-category=\"{self.id}\">{self.name}</span>"
 
