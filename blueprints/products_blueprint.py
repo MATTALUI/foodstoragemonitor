@@ -67,6 +67,7 @@ def create():
 def update(product_id):
     product = Product.query.get(product_id)
     product.name = request.form.get('name')
+    product.upc_code = request.form.get('upc_code') or None
     db.session.add(product)
     db.session.commit()
     return redirect('/products')

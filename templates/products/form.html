@@ -12,6 +12,9 @@
         <div class="form-group">
           <input type="text" placeholder="Name" name="name" class="form-control product_name"  value="{{product.name}}" required>
         </div>
+        <div class="form-group">
+          <input type="text" placeholder="UPC Code" name="upc_code" class="form-control product_upc_code"  value="{{product.upc_code or ''}}" required>
+        </div>
         <div class="row">
           <div class="col-sm-2">
             <button class="w-100 btn btn-primary btn-lg saveProductButton">Save Product</button>
