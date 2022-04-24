@@ -54,19 +54,22 @@ def check_longevity():
         "drinkable_longevity": drinkable_longevity,
     }) + "\n"
 
+def count_nonexpired(items):
+    count = 0
+    for item in items:
+        if not item.is_ignorable:
+            count += 1
+    return count
+
 def build_expiry_report():
     expired_items = ItemSet.query.filter(ItemSet.expiration < date.today()).all()
-    expired_items_count = 0
-    for item in expired_items:
-        if not item.is_ignorable:
-            expired_items_count += 1
-    warning_items = ItemSet.query.filter(ItemSet.expiration < get_warning_date()).filter(ItemSet.expiration >= date.today()).count()
-    highlight_items = ItemSet.query.filter(ItemSet.expiration < get_highlight_date()).filter(ItemSet.expiration >= get_warning_date()).count()
+    warning_items = ItemSet.query.filter(ItemSet.expiration < get_warning_date()).filter(ItemSet.expiration >= date.today()).all()
+    highlight_items = ItemSet.query.filter(ItemSet.expiration < get_highlight_date()).filter(ItemSet.expiration >= get_warning_date()).all()
 
     return {
-        "expired": expired_items_count,
-        "warning": warning_items,
-        "highlight": highlight_items,
+        "expired": count_nonexpired(expired_items),
+        "warning": count_nonexpired(warning_items),
+        "highlight": count_nonexpired(highlight_items),
     }
 
 def write_expiry_report(report):

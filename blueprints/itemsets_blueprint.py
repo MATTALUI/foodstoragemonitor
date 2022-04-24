@@ -136,6 +136,8 @@ def get_item_set_context(item_set):
     # Check if already expired
     if item_set.expiration < date.today() and ignorable_item:
         return "dark"
+    if ignorable_item:
+        return "default"
     if item_set.expiration < date.today():
         return "danger"
     # Check if expiry in next 2 weeks
