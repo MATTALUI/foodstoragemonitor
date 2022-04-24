@@ -1,6 +1,5 @@
 from datetime import datetime
 from threading import Thread
-from multiprocessing import Process
 from time import sleep
 
 # We wrap this guy in an import check because gpiozero is an rpi-specific
@@ -22,7 +21,7 @@ try:
             self._led_green = LED(HardwareManager.PIN_GREEN)
             self._led_blue = LED(HardwareManager.PIN_BLUE)
             self._btn = Button(HardwareManager.PIN_BTN)
-            self._magical_process = None
+            self._magical_thread = None
             # self._start_thread(self._start_general_button)
 
         def _clear_led(self):
@@ -79,16 +78,19 @@ try:
             self._start_thread(self._await_button_press)
 
         def _start_thread(self, action, args=()):
-            self._magical_process = Process(target = action, args=args)
-            self._magical_process.start()
+            self._magical_thread = Thread(target = action, args=args)
+            self._magical_thread.start()
 
         def run_test(self):
             self._start_thread(self._led_test)
 
         def reset(self):
-            if self._magical_process is not None:
-                self._magical_process.terminate()
-                self._magical_process = None
+            if self._magical_thread is not None:
+                # We have to unlock the thread lock  before we can stop it.
+                # This might be a wicked practice, but... ¯\_(ツ)_/¯
+                self._magical_thread._tstate_lock.release()
+                self._magical_thread._stop()
+                self._magical_thread = None
             self._clear_led()
 
         def accept_report(self, expiry_report):
