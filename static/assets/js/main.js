@@ -11,5 +11,12 @@
     fetch(`http://${host}/cron/reset/`, { method: 'POST' });
   };
 
+  // Functionality for running a quick LED test
+  const testLED = (event) => {
+    event.preventDefault();
+    fetch(`/cron/test/`, { method: 'POST' });
+  }
+
   document.querySelector('#clear-led').addEventListener('click', resetLED);
+  document.querySelector('#test-led').addEventListener('click', testLED);
 })();
