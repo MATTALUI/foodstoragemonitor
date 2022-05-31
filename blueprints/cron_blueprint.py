@@ -17,10 +17,10 @@ def test_cron():
     hardware_manager.run_test()
     return "All's well!\n"
 
-@cron_blueprint.route("/cron/reset/", methods=['GET', 'POST'])
-def reset():
-    hardware_manager.reset()
-    return 'true'
+# @cron_blueprint.route("/cron/reset/", methods=['GET', 'POST'])
+# def reset():
+#     hardware_manager.reset()
+#     return 'true'
 
 @cron_blueprint.route("/cron/check-expiry/", methods=['POST'])
 def check_expiry():
