@@ -84,14 +84,14 @@ try:
         def run_test(self):
             self._start_thread(self._led_test)
 
-        def reset(self):
-            if self._magical_thread is not None:
-                # We have to unlock the thread lock  before we can stop it.
-                # This might be a wicked practice, but... ¯\_(ツ)_/¯
-                self._magical_thread._tstate_lock.release()
-                self._magical_thread._stop()
-                self._magical_thread = None
-            self._clear_led()
+#        def reset(self):
+#            if self._magical_thread is not None:
+#                # We have to unlock the thread lock  before we can stop it.
+#                # This might be a wicked practice, but... ¯\_(ツ)_/¯
+#                self._magical_thread._tstate_lock.release()
+#                self._magical_thread._stop()
+#                self._magical_thread = None
+#            self._clear_led()
 
         def accept_report(self, expiry_report):
             await_cancel = False
