@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Food Store | {{ item_set.product_name }}{% endblock %}
+{% block content %}
+  <script src="/assets/js/items-show.js" charset="utf-8" defer></script>
+  <div class="itemset" data-itemset="{{item_set.id}}">
+    <h1>{{ item_set.product_name }}</h1>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th class="pl-0">Expiration</th>
+          <td class="pr-0 expiration">{{ item_set.expiration.strftime("%m/%d/%Y") }}</td>
+        </tr>
+        <tr>
+          <th class="pl-0">Quantity</th>
+          <td class="pr-0 quantity">{{ item_set.quantity }}</td>
+        </tr>
+        <tr>
+          <th class="pl-0">Description</th>
+          <td class="pr-0 description">{{ item_set.description }}</td>
+        </tr>
+        <tr>
+          <th class="pl-0">Categories</th>
+          <td class="pr-0 categories">
+            {% for category in item_set.categories %}
+              {{ category.to_chip_ele()|safe }}
+            {% endfor %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-secondary w-100 mt-3 increment">Increment</button>
+    <button class="btn btn-secondary w-100 mt-3 decrement">Decrement</button>
+    <button class="btn btn-secondary w-100 mt-3 manage-categories">Manage Categories</button>
+    <a href="/storage-items/{{item_set.id}}/edit" class="btn btn-warning w-100 mt-3">Edit</a>
+    <button class="btn btn-danger w-100 mt-3 delete">Delete</button>
+  </div>
+
+
+  <div id="category-modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">Manage Categories</span>
+        </div>
+        <div class="modal-body">
+          <select id="category-manager" multiple class="form-control w-100" name="category">
+            {% for category in categories %}
+              <option value="{{ category.id }}">
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary close-modal">Close</button>
+          <button type="button" class="btn btn-primary save-categories">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

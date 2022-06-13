@@ -17,6 +17,6 @@
     fetch(`/cron/test/`, { method: 'POST' });
   }
 
-  document.querySelector('#clear-led').addEventListener('click', resetLED);
+  // document.querySelector('#clear-led').addEventListener('click', resetLED);
   document.querySelector('#test-led').addEventListener('click', testLED);
 })();

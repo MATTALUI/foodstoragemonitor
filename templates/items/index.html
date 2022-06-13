@@ -61,7 +61,8 @@
               <tr class="itemset table-{{item_set['context']}}" data-itemset="{{item_set['data']['id']}}">
                 {% if index == 0 %}
                   <td class="product_name" rowspan="{{product_data['item_sets']|length}}">
-                    {{ product_data['product_name'] }}
+                    <span class="d-none  d-md-inline-block">{{ product_data['product_name'] }}</span>
+                    <a href="/storage-items/{{item_set['data']['id']}}" class="d-md-none">{{ product_data['product_name'] }}</a>
                   </td>
                 {% endif %}
                 <td class="expiration">{{ item_set['data'].expiration.strftime("%m/%d/%Y") }}</td>

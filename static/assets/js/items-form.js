@@ -1,7 +1,7 @@
 (() => {
   const scannerModal = new bootstrap.Modal(document.getElementById('scanner-modal'));
   let upcLookupData = null;
-  let scannerEnabled = window.location.protocol == 'https:';
+  let scannerEnabled = window.location.protocol == 'https:' || window.location.host.includes('localhost');
   let itemSetSelection = null;
   let itemSet = null;
   try {
@@ -190,7 +190,7 @@
             .then(res => res.json())
             .then((productData) => {
               setTimeout(() => {
-                console.log(productData);
+                // console.log(productData);
                 stopScannerLoading();
                 if (productData.error) {
                   const $warning = $(`

@@ -24,9 +24,11 @@ def edit_item_set(item_set_id):
     if request.method == 'GET':
         return edit(item_set_id)
 
-@itemsets_blueprint.route("/storage-items/<item_set_id>/", methods=['POST','DELETE'])
+@itemsets_blueprint.route("/storage-items/<item_set_id>/", methods=['GET', 'POST','DELETE'])
 def item_set(item_set_id):
-    if request.method == 'DELETE':
+    if request.method == 'GET':
+        return get(item_set_id)
+    elif request.method == 'DELETE':
         return destroy(item_set_id)
     elif request.method == 'POST':
         return update(item_set_id)
@@ -168,6 +170,15 @@ def upsert_item_set():
         db.session.add(item_set)
     db.session.commit()
     return 'true'
+
+def get(item_set_id):
+    item_set = ItemSet.query.get(item_set_id)
+    categories = Category.query.all()
+    return render_template(
+        'items/show.html',
+        item_set=item_set,
+        categories=categories,
+    )
 
 def create():
     return upsert_item_set()
