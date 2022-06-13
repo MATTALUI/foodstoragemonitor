@@ -2,6 +2,7 @@
   let selectedModalCategories = [];
   let selectedItemSet = null;
   const modal = new bootstrap.Modal(document.getElementById('category-modal'));
+  const showModal = new bootstrap.Modal(document.getElementById('show-modal'));
   const managerMap = {
     increment: num => ++num,
     decrement: num => --num,
@@ -19,7 +20,9 @@
     .then(success => {
       const previousValue = +$itemSet.find('.quantity').html();
       const nextValue = managerMap[type](previousValue);
-      $itemSet.find('.quantity').html(nextValue);
+      $(`.itemset[data-itemset="${itemSetId}"]`).each((_, ele) => {
+        $(ele).find('.quantity').html(nextValue);
+      });
     })
     .catch(console.error);
   };
@@ -42,6 +45,7 @@
     selectedItemSet = null;
     $('#category-manager').val(selectedModalCategories);
     modal.hide();
+    showModal.hide();
   }
 
   const openModal = event => {
@@ -74,6 +78,29 @@
     .catch(console.error);
   }
 
+  const openShowModal = event => {
+    event.preventDefault();
+    const $showModal = $('#show-modal');
+    selectedItemSet = $(event.target).closest('.itemset');
+
+    const itemSetId = selectedItemSet.data('itemset');
+    const productName = selectedItemSet.find('.product_name').children().first().html();
+    const expiration = selectedItemSet.find('.expiration').html();
+    const quantity = selectedItemSet.find('.quantity').html();
+    const description = selectedItemSet.find('.description').html();
+    const categories = selectedItemSet.find('.categories').html();
+
+    $showModal.find('.itemset').attr('data-itemset', itemSetId);
+    $showModal.find('.modal-title').html(productName);
+    $showModal.find('.expiration').html(expiration);
+    $showModal.find('.quantity').html(quantity);
+    $showModal.find('.description').html(description);
+    $showModal.find('.categories').html(categories);
+    $showModal.find('.edit').attr('href', `/storage-items/${itemSetId}/edit/`);
+
+    showModal.show();
+  }
+
 
   $('.increment').on('click', changeItemSet('increment'));
   $('.decrement').on('click', changeItemSet('decrement'));
@@ -81,4 +108,5 @@
   $('.manage-categories').on('click', openModal);
   $('.close-modal').on('click', closeModal);
   $('.save-categories').on('click', saveCategories);
+  $('.show-button').on('click', openShowModal);
 })();

@@ -62,7 +62,7 @@
                 {% if index == 0 %}
                   <td class="product_name" rowspan="{{product_data['item_sets']|length}}">
                     <span class="d-none  d-md-inline-block">{{ product_data['product_name'] }}</span>
-                    <a href="/storage-items/{{item_set['data']['id']}}" class="d-md-none">{{ product_data['product_name'] }}</a>
+                    <a href="/storage-items/{{item_set['data']['id']}}" class="d-md-none show-button">{{ product_data['product_name'] }}</a>
                   </td>
                 {% endif %}
                 <td class="expiration">{{ item_set['data'].expiration.strftime("%m/%d/%Y") }}</td>
@@ -92,6 +92,49 @@
           There's nothing here!
         </div>
       {% endif %}
+    </div>
+  </div>
+
+  <div id="show-modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title h1">Item Product Name</span>
+        </div>
+        <div class="modal-body">
+          <div class="itemset" data-itemset="?">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th class="pl-0">Expiration</th>
+                  <td class="pr-0 expiration">expiration</td>
+                </tr>
+                <tr>
+                  <th class="pl-0">Quantity</th>
+                  <td class="pr-0 quantity">quantity</td>
+                </tr>
+                <tr>
+                  <th class="pl-0">Description</th>
+                  <td class="pr-0 description">description</td>
+                </tr>
+                <tr>
+                  <th class="pl-0">Categories</th>
+                  <td class="pr-0 categories">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-secondary w-100 mt-3 increment">Increment</button>
+            <button class="btn btn-secondary w-100 mt-3 decrement">Decrement</button>
+            <!-- <button class="btn btn-secondary w-100 mt-3 manage-categories">Manage Categories</button> -->
+            <a href="?" class="btn btn-warning w-100 mt-3 edit">Edit</a>
+            <button class="btn btn-danger w-100 mt-3 delete">Delete</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary close-modal w-100">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
