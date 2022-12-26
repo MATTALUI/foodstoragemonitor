@@ -1,4 +1,4 @@
-(() => {
+(async () => {
   // Functionality for resetting the LED from the UI
   const resetLED = (event) => {
     event.preventDefault();
@@ -19,4 +19,13 @@
 
   document.querySelector('#clear-led').addEventListener('click', resetLED);
   document.querySelector('#test-led').addEventListener('click', testLED);
+})();
+
+(async () => {
+  // Register the Service Worker and Prepare PWA Schtuff.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/assets/service-worker.js');
+    });
+  }
 })();
