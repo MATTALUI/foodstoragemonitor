@@ -22,10 +22,25 @@
 })();
 
 (async () => {
+  let deferredPrompt = null;
+
   // Register the Service Worker and Prepare PWA Schtuff.
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/assets/service-worker.js');
+      navigator.serviceWorker.register('/service-worker.js');
     });
   }
+
+  window.addEventListener('beforeinstallprompt', function (deferredPrompt) {
+    const installButton = document.createElement('a');
+    installButton.innerHTML = 'Install App';
+    installButton.href = ""
+    installButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      deferredPrompt.prompt();
+      console.log('clicked');
+    })
+    document.querySelector('footer div').appendChild(installButton);
+  });
 })();
+0

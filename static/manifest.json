@@ -1,6 +1,7 @@
 {
   "short_name": "Foodmon",
   "name": "Food Storage Monitor",
+  "description": "An application to help monitor food storage items.",
   "icons": [
     {
       "src": "/assets/images/icon_192.png",

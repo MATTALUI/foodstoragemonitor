@@ -50,5 +50,4 @@ self.addEventListener('install', onInstall);
 self.addEventListener('activate', onActivate);
 self.addEventListener('fetch', onFetch);
 self.addEventListener("push", function (event) {
-  console.log({ pushEvent: event });
 });
